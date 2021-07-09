@@ -1,0 +1,153 @@
+.login{
+    background-color: bisque;
+    font-family: 'Montserrat', sans-serif;
+
+    width: 100%;
+    height: 100vh;
+    display: flex;
+     text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+.loginBox{
+    background-color: white;
+    padding:30px 20px ;
+    flex: 0.2;
+    display: flex;
+    flex-direction: column;
+ 
+    border-radius: 10px;
+}
+ input, button{
+    background-color: rgba(211, 211, 211, 0.582);
+    outline: none;
+    margin: 10px !important ;
+    border: none;
+    padding: 10px 20px;
+    color: rgb(0, 0, 0);
+    border-radius: 20px;
+}
+
+  .login  button{
+    background-color: #ff0534;
+    cursor: pointer;
+    color: white !important;
+    letter-spacing: 2PX;
+} .login select{
+    margin: 10px ;
+    outline: none;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    background-color: rgba(211, 211, 211, 0.582) ;
+}
+option{
+    border: none;
+}
+.dashboard{
+    display: flex;
+    font-family: 'Montserrat', sans-serif;
+    flex-direction: column;
+    background-color: antiquewhite;
+}
+.dashboardTop{
+    background-color: #ff0534;
+    color: white;
+    display: flex;
+    justify-content:center;
+    padding: 10px;
+    padding-right: 50px;
+}
+.dashboardTop h4{
+    color: white;
+    font-weight: 700;
+}
+.dashboardBody{
+    padding: 3rem;
+    display: flex;
+    
+}
+.userdp{
+    display: flex;
+    justify-content: center;
+}
+.personalInfo{
+    background-color: white;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+    margin: 1rem;
+    flex: 0.3;
+    border-radius: 2rem;
+}
+.appointmentinfo{
+    background-color: white;
+    margin: 1rem;
+    flex: 0.7;
+    border-radius: 2rem;
+    padding: 2rem;
+}
+.appointmentinfo h3{
+    font-weight: 700;
+    text-align: center;
+}
+.appointmentbody{
+    display: flex;
+}
+.specilistList{
+    flex: 1;
+    
+    margin: 10px;
+   
+  
+    
+}
+.specilistList ul{
+    margin: 0;
+     margin-top: 10px;
+    padding: 0;
+    height: 52vh;
+    overflow-y: scroll;
+
+}
+
+.specilistList ul h2{
+    font-weight: 700;
+    text-align: center;
+}
+.specilistList ul li {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ff0534;
+    border-radius: 20px;
+    padding: 10px 20px ;
+    margin-bottom: 20px;
+
+}
+.profileAction{
+    display: flex;
+    justify-content: space-between;
+}
+.personalInfo button{
+    flex-grow: 1;
+    margin: 1rem;
+}
+.completeprofile{
+    display: flex;
+    flex-direction: column;
+}
+.completeprofile input, .completeprofile button{
+    margin: 10px;
+}
+@media only  screen and (max-width:900px)  {
+    .dashboardBody{
+        flex-direction: column;
+        padding: 1rem;
+    }
+    .appointmentbody{
+        flex-direction: column-reverse;
+    }
+}
