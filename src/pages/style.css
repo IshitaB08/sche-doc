@@ -142,6 +142,9 @@ option{
 .completeprofile input, .completeprofile button{
     margin: 10px;
 }
+.ant-picker-input > input{
+    margin: 0px !important;
+}
 @media only  screen and (max-width:900px)  {
     .dashboardBody{
         flex-direction: column;

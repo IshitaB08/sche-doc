@@ -42,7 +42,7 @@ const Login = () => {
             <div className="loginBox" >
             <h4>Login</h4>
               <input onChange={(e)=>setemail(e.target.value)} placeholder="Enter Email"/>
-              <input onChange={(e)=>setpassword(e.target.value)}  placeholder="Enter password"/>
+              <input type="password" onChange={(e)=>setpassword(e.target.value)}  placeholder="Enter Password"/>
               <button onClick={()=>handleLogin()} >Login</button>
 
               <Divider orientation="center">or</Divider>

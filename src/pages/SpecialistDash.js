@@ -1,21 +1,26 @@
 import React, { useEffect, useState } from 'react'
-import { Avatar ,Divider, Button, message } from 'antd'
+import { Avatar ,Divider, Button, message, Select, DatePicker } from 'antd'
 import {UserOutlined, EnvironmentFilled, SafetyOutlined, CheckCircleFilled, CalendarFilled} from '@ant-design/icons'
 import {AppointmentBoxSpec} from '../component/AppointmentBox'
 import { useHistory } from 'react-router'
 import axiosInstance from '../component/axiosInstance'
-
+import slotdata, { Specialization } from '../component/slotData'
+import moment from 'moment';
 const SpecialistDashboard = () => {
     const [data, setdata] = useState()
     const [myappoint, setmyappoint] = useState([])
     const [location, setlocation] = useState()
     const [timimg, settiming] = useState()
-    const [available, setavailable] = useState(true)
+    const [available, setavailable] = useState()
     const [scope, setscope] = useState()
     const [completeprofile, setcompleteprofile] = useState(false)
     const [loaded, setloaded] = useState()
-   const history=   useHistory()
+    const [starttime, setstarttime] = useState()
+    const [endtime, setendtime] = useState()
 
+   const history=   useHistory()
+   const format = 'HH:mm';
+    const Option = Select.Option
         const token = window.localStorage.token;
         if(!token){
              history.push("/")
@@ -27,7 +32,7 @@ const SpecialistDashboard = () => {
                     const callapi = await axiosInstance.get('/userdata', { headers:{ "Authorization": `${token}`} })
                     const response = callapi.data;
                     setdata(response.data)
-                    console.log(response)
+                    // console.log(response)
                   
                 } catch (error) {
                     console.log(error)
@@ -36,14 +41,14 @@ const SpecialistDashboard = () => {
                     const callapi = await axiosInstance.get("/myappointment", { headers :{ "Authorization":`${token}` } })
                     const response = callapi.data;
                     setmyappoint(response.data) 
-                    console.log(response)
+                    // console.log(response)
                      setloaded(true)
                 } catch (error) {
                     console.log(error)
                 }
             }
             getdata();
-        })
+        },[])
     const data1 =[1,2,3,4,5]
     const handlelogout=()=>{
         localStorage.clear();
@@ -54,7 +59,9 @@ const SpecialistDashboard = () => {
     }
     const handleSave=async()=>{
         const token = localStorage.getItem("token")
-const data={location, timimg, scope, available}
+const data={location, scope, "admintiming":{
+   "start":starttime,"end":endtime
+}}
 console.log(data)
 try { 
     const callapi = await axiosInstance.put('/completeprofile', {...data}, {headers :{"Authorization":`${token}` }})
@@ -78,6 +85,7 @@ try {
    }
 
 
+
     if(!loaded){
         return <h3>Loading pls await...</h3>
     }
@@ -96,12 +104,23 @@ try {
             
   
             <div className="completeprofile" >
-            <h4>Login</h4>
+            <h4>Login</h4> 
               <input onChange={(e)=>setlocation(e.target.value)} value={location}  placeholder="Location"/>
-              <input onChange={(e)=>setscope(e.target.value)}  value={scope} placeholder="Specialization"/>
-              <input onChange={(e)=>setavailable(true)} value={available} type="boolean"  placeholder="Availability (true/ False)"/>
-              <input onChange={(e)=>settiming(e.target.value)} value={timimg}  placeholder="Timing"/>
-              <button onClick={()=>handleSave()} >Save</button>
+              {/* <input onChange={(e)=>setscope(e.target.value)}  value={scope} placeholder="Specialization"/> */}
+              <Select style={{margin:"15px"}} defaultValue="Select Specialization" onChange={(e)=>setscope(e)}  >
+                  {
+                      Specialization.map(i=>
+                       <Option value={i} >{i}</Option>
+                      )
+                  }
+              </Select>
+              <p>Availability</p>
+              <div style={{display:"flex", flexDirection:"row"}} >
+              <DatePicker.TimePicker style={{margin:"10px", width:"100%"}} format={format}  onChange={(time,datestring)=>setstarttime(time)}/>
+              <DatePicker.TimePicker style={{margin:"10px", width:"100%"}} format={format}  onChange={(time,datestring)=>setendtime(time)}/> </div>
+              {/* <input onChange={(e)=>setavailable(true)} value={available} type="boolean"  placeholder="Availability (true/ False)"/> */}
+              {/* <input onChange={(e)=>settiming(e.target.value)} value={timimg}  placeholder="Timing"/> */}
+              <button style={{backgroundColor:"#ff0534"}} onClick={()=>handleSave()} >Save</button>
 
 
         </div>
@@ -113,16 +132,16 @@ try {
                <Divider/>
                 <b>{data.fullname}</b>
                 <p>{data.email}</p>
-                <p>password : {data.password}</p>
-                  {
-                      data.details? <div>
-                    <p> <EnvironmentFilled /> Location : {data.details.location}</p> 
-                    <p> <CheckCircleFilled /> Available : { `${data.details.available}`}</p>
-                    <p>  <SafetyOutlined /> Scope : {data.details.scope}</p>
-                   
-                    <p> <CalendarFilled /> Appointment Timing : {data.details.timimg}</p>
-                </div> :""
-                  }
+                <p>Designation : {data.password}</p>
+                 {
+                     data.location?  <p> <EnvironmentFilled /> Location : {data.location}</p>  :""
+                 }
+                  
+                    {/* <p> <CheckCircleFilled /> Available : { `${data.details.available}`}</p> */}
+                 {
+                     data.scope?  <p>  <SafetyOutlined /> Scope : {data.scope}</p> :""
+                 } 
+                
                
      </div>
      <div className="profileAction" >
@@ -133,13 +152,13 @@ try {
      </> }
        </div>
             <div className="appointmentinfo">
-                <h3>Appontment</h3>
+                <h3>Appointment</h3>
                 <div className="appointmentbody" >
                 <div className="specilistList">
              <h3> Pending Appointment </h3> 
                     <ul>
                       {
-                          myappoint.filter(i=>i.done===false).map(i=>
+                          myappoint.filter(i=>i.done!=="done").filter(i=>i.done!=="cencel").map(i=>
                           <AppointmentBoxSpec
                           
                             data={i}
@@ -152,7 +171,7 @@ try {
              <h3>Finished Appointment</h3>   
                     <ul>
                          {
-                            myappoint.filter(i=>i.done===true).map(i=>
+                            myappoint.filter(i=>i.done==='true').map(i=>
                           <AppointmentBoxSpec
                             finished
                             data={i}
