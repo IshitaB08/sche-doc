@@ -13,9 +13,10 @@ firebase.analytics();
 firebase.auth().languageCode = 'it';
 const Register = () => {
     const [fullname, setfullname] = useState()
+    const [otpOpen, setotpOpen] = useState(false)
     const [password, setpassword] = useState()
     const [email, setemail] = useState()
-    const [role, setrole] = useState("")
+    const [role, setrole] = useState("admin")
    const Option = Select.Option
     const [modelOpen, setmodelOpen] = useState(false)
     const history=  useHistory();
@@ -117,6 +118,13 @@ console.log(role, value )
               <option  value="admin" >Specialist</option>
               <option value="user" >Patient</option>
           </select>
+          {
+              otpOpen? <input type="password"  onChange={(e)=>setpassword(e.target.value)} placeholder="Enter OTP"/>
+              : ""
+          }
+         
+
+          <button onClick={()=>setotpOpen(true)} >{otpOpen ? "Generated":"Generate OTP"}</button>
           <button onClick={()=>handleRegister()} >Register</button>
         
 
@@ -128,7 +136,7 @@ console.log(role, value )
          
          </Select>
            <button  onClick={()=>firebaseAction()} >signup with Google</button>
-           <button  onClick={()=>facebookRegister()} >signup with Facebook</button>
+           {/* <button  onClick={()=>facebookRegister()} >signup with Facebook</button> */}
           {/* <h4> <Link  to="/"> Already have an Account ? Login Now</Link></h4> */}
 
         </div>

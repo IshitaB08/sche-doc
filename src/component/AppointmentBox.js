@@ -35,6 +35,7 @@ const BookAppointmentBox = ({booked,data,  onclick}) => {
             const response = callapi.data.data;
             setadmindata(response)
             setloaded(true)
+
          } catch (error) {
              console.log(error)
          }  
@@ -42,6 +43,12 @@ const BookAppointmentBox = ({booked,data,  onclick}) => {
         }
         getdata();
       })
+  
+
+
+
+
+
       if(!loaded){
               return null
       }
@@ -112,8 +119,9 @@ const AppointmentBoxSpec = ({finished,data, details, onclick, specialist}) => {
          message.error("Something went wrong !")
        }
        const data2={
-         slots:getslots, assignTo:data.assignTo
+         slots:getslots, id:data.assignTo
        }
+       console.log(data2)
        try {
          const callapi = await axiosInstance.post("/updateslots", {...data2})
          const response =callapi.data;
@@ -122,6 +130,7 @@ const AppointmentBoxSpec = ({finished,data, details, onclick, specialist}) => {
          console.log(error)
        }
       }
+     
       const handleCencelAppintment=async(id)=>{
         console.log(id)
         try {
@@ -132,6 +141,26 @@ const AppointmentBoxSpec = ({finished,data, details, onclick, specialist}) => {
             console.log(error)
         }
     }
+
+    const handleDone=async(id)=>{
+      console.log(id)
+      try {
+          const callapi = await axiosInstance.get(`/appointment/${id}/finish`)
+          const response = callapi.data;
+          message.success("Appointment Finished !")
+      } catch (error) {
+          console.log(error)
+      }
+  }
+
+
+
+
+
+
+
+
+
 
       if(!loaded){
               return null
@@ -144,12 +173,16 @@ const AppointmentBoxSpec = ({finished,data, details, onclick, specialist}) => {
        <p> <CalendarFilled /> {data.slot.date} {data.slot.time}</p>
         <p> {data.details}</p></div> 
         <div style={{display:"flex", justifyContent:"space-between"}} >
-       <p> <CheckCircleFilled />Age- "damidata"</p>
-        <p><CalendarFilled /> medicalhistory- "damidata"</p>
+       <p> <CheckCircleFilled />Age- {admindata.clientDetails.age}</p>
+        <p><CalendarFilled /> medicalhistory- {admindata.clientDetails.medicalhistory}</p>
         </div> 
         {
-            finished ? <Button onClick={onclick} danger type="primary" > Delete  </Button> :
-            data.done==="accepted"?  <Button disabled danger type="primary" > Accepted  </Button>:
+            finished ? <Button onClick={onclick} disabled danger type="primary" > Finished  </Button> :
+            data.done==="accepted"?  
+            <div style={{display:"flex"}} >
+            <Button disabled  style={{flex:"1"}}  danger type="primary" >Accepted </Button>
+            <Button style={{flex:"1"}} onClick={()=>handleDone(data._id)} danger type="primary" >Finish</Button>
+            </div>:
             <div style={{display:"flex"}} >
             <Button style={{flex:"1"}} onClick={()=>acceptAppointment()} danger type="primary" >Accept </Button>
             <Button style={{flex:"1"}} onClick={()=>handleCencelAppintment(data._id)} danger type="primary" >Reject</Button>

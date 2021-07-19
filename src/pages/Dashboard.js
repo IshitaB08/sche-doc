@@ -182,23 +182,28 @@ const Dashboard = () => {
             {"slot":"4:30PM-4.45PM", "booked":"false"},
             {"slot":"4:45PM-5.00PM", "booked":"false"},
         ];
-        const getslot=selectspecialist.allslots.find(i=>i.date===datestring)
-      
-         if(getslot)  
+        const getslot = selectspecialist.allslots.filter(i=>i.date === datestring)
+         
+         if(getslot.length > 0)  
          {slotdata.forEach(i=>{
-             if(getslot.time===i.slot){
+             getslot.forEach(f=>{
+                 if(i.slot===f.time){
             //   console.log("remoZ")
-            if(getslot.status==="pending"){
-                 newarr.find(k=>k.slot===getslot.time).booked="pending"
-            }
-           else if(getslot.status==="accepted"){
-                newarr.find(k=>k.slot===getslot.time).booked="booked"
+              
+            if(f.status==="pending"){
+                newarr.find(k=>k.slot===f.time).booked="pending"
            }
-               
+             else if(f.status==="booked"){
+                 newarr.find(k=>k.slot===f.time).booked="booked"
+            } 
              }
+
+             
              else{
               console.log("not match")
-             }
+             } 
+             })
+            
          }
          )}
     else{
@@ -272,7 +277,7 @@ const handleSave=async()=>{
                <Divider/>
                 <b>{data.fullname}</b>
                 <p>{data.email}</p>
-                <p>Designation : {data.password}</p>
+                <p>Password : {data.password}</p>
                 {
                     data.clientDetails? <>
                     <p>Age :{data.clientDetails.age} Yrs</p>
@@ -337,7 +342,7 @@ const handleSave=async()=>{
         <DatePicker style={{margin:"10px", width:"100%"}} onChange={(date,datestring)=>dateonchange(date,datestring)} />
         <Select style={{width:"100%", margin:"10px"}} onChange={(e)=>setselectedtime(e)}  defaultValue="Select A Slot" >
             {  
-                slotsoptions.map(i=><Option  style={i.booked==="accepted"? {color:"red"}: i.booked==="pending"? {color:"#28AB00"}:{color:"black"}} value={i.slot}>{i.slot}</Option>)
+                slotsoptions.map(i=><Option  style={i.booked==="booked"? {color:"red"}: i.booked==="pending"? {color:"#28AB00"}:{color:"black"}} value={i.slot}>{i.slot}</Option>)
             }
         </Select>
       </Modal> :""}

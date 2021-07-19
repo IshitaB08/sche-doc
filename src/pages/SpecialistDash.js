@@ -132,7 +132,7 @@ try {
                <Divider/>
                 <b>{data.fullname}</b>
                 <p>{data.email}</p>
-                <p>Designation : {data.password}</p>
+                <p>Password : {data.password}</p>
                  {
                      data.location?  <p> <EnvironmentFilled /> Location : {data.location}</p>  :""
                  }
